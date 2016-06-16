@@ -31,4 +31,19 @@ define('LOG_ERRORS_FILE', 'E:\\ClassWork\\php\\workspace\\tshirtshop\\errors_log
 
 //Generic error message
 define('SITE_GENERIC_ERROR_MESSAGE', '<h1>TShirtShop Error!<h1>');
+
+//Database connectivity setup
+define('DB_PERSISTENCY', 'true');
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'tshirtshopadmin');
+define('DB_PASSWORD', 'tshirtshopadmin');
+define('DB_DATABASE', 'tshirtshop');
+define('PDO_DSN', 'mysql:host=' . DB_SERVER . ';dbname=' . DB_DATABASE);
+
+//Server HTTP port
+define('HTTP_SERVER_PORT', '8080');
+
+//Name of virtual directory the site run in
+define('VIRTUAL_LOCATION', '/tshirtshop/');
+
 ?>
