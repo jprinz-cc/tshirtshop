@@ -20,12 +20,13 @@
 							</a>
 						</div>
 						<div id="contents" class="yui-g">
-							<h2>YOUR DATA GOES HERE</h2>
+							{include file=$obj->mContentsCell}
 						</div>
 					</div>
 				</div>
 				<div class="yui-b">
 					{include file="departments_list.tpl"}
+					{include file=$obj->mCategoriesCell}
 				</div>	
 			</div>	
 		</div>

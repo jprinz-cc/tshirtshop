@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.25-dev, created on 2016-06-16 03:32:33
+<?php /* Smarty version 2.6.25-dev, created on 2016-06-17 17:32:22
          compiled from departments_list.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('function', 'load_presentation_object', 'departments_list.tpl', 2, false),)), $this); ?>

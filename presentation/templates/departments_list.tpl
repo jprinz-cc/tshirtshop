@@ -9,8 +9,7 @@
     {assign var=selected value=""}
     {* Verify if the department is selected to decide what CSS style
        to use *}
-    {if ($obj->mSelectedDepartment ==
-         $obj->mDepartments[i].department_id)}
+    {if ($obj->mSelectedDepartment == $obj->mDepartments[i].department_id)}
       {assign var=selected value="class=\"selected\""}
     {/if}
     <li>

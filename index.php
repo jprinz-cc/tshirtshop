@@ -1,4 +1,8 @@
 <?php
+//echo phpinfo();
+//Activate session
+session_start();
+
 //Include utility files
 require_once 'include/config.php';
 require_once BUSINESS_DIR . 'error_handler.php';

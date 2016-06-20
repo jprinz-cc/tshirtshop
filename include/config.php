@@ -46,4 +46,8 @@ define('HTTP_SERVER_PORT', '8080');
 //Name of virtual directory the site run in
 define('VIRTUAL_LOCATION', '/tshirtshop/');
 
+//Configure product lists display options
+define('SHORT_PRODUCT_DESCRIPTION_LENGTH', 150);
+define('PRODUCTS_PER_PAGE', 4);
+
 ?>

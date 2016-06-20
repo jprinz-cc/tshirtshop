@@ -14,10 +14,57 @@ class Link{
 		return htmlspecialchars($link, ENT_QUOTES);		
 	}
 	
-	public static function ToDepartment($deparmentId){
+	public static function ToDepartment($deparmentId, $page = 1){
 		$link = 'index.php?DepartmentId=' . $deparmentId;
+		
+		if($page > 1){
+			$link .= '&Page=' . $page;
+		}
 		
 		return self::Build($link);
 	}
 	
+	public static function ToCategory($departmentId, $categoryId, $page = 1){
+		$link = 'index.php?DepartmentId=' . $departmentId . '&CategoryId=' . $categoryId;
+		
+		if($page > 1){
+			$link .= '&Page=' . $page;
+		}
+		
+		return self::Build($link);
+	}
+	
+	public static function ToProduct($productId){
+		return self::Build('index.php?ProductId=' . $productId);
+	}
+	
+	public static function ToIndex($page = 1){
+		$link = '';
+		if($page > 1){
+			$link .= 'index.php?Page=' . $page;
+		}
+		
+		return self::Build($link);
+	}
+	
+	public static function QueryStringToArray($queryString)
+	{
+		$result = array();
+	
+		if ($queryString != '')
+		{
+			$elements = explode('&', $queryString);
+	
+			foreach($elements as $key => $value)
+			{
+				$element = explode('=', $value);
+				$result[urldecode($element[0])] =
+				isset($element[1]) ? urldecode($element[1]) : '';
+			}
+		}
+	
+		return $result;
+	}
+	
 }
+?>
