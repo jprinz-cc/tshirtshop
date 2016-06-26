@@ -186,19 +186,19 @@ class Catalog
   	return DatabaseHandler::GetRow($sql, $params);
   }
   
-  // Retrieves product locations
-  public static function GetProductLocations($productId)
-  {
-  	// Build SQL query
-  	$sql = 'CALL catalog_get_product_locations(:product_id)';
-  
-  	// Build the parameters array
+
+
+  //Retrieves product attributes
+  public static function GetProductAttributes($productId) {
+  	//Build SQL query
+  	$sql = 'CALL catalog_get_product_attributes(:product_id)';
+
+  	//Build the parameters array
   	$params = array (':product_id' => $productId);
-  
-  	// Execute the query and return the results
+
+  	//Execute the query and return the results
   	return DatabaseHandler::GetAll($sql, $params);
   }
-  
-  
+
 }
 ?>
