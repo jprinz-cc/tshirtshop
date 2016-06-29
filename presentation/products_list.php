@@ -6,6 +6,7 @@ class ProductsList
   public $mrTotalPages;
   public $mLinkToNextPage;
   public $mLinkToPreviousPage;
+  public $mProductListPages = array();
   public $mProducts;
 
   // Private members
@@ -84,6 +85,34 @@ class ProductsList
         else
           $this->mLinkToPreviousPage = Link::ToIndex($this->mPage - 1);
       }
+
+      // Build the pages links
+      for ($i = 1; $i <= $this->mrTotalPages; $i++)
+        if (isset($this->_mCategoryId))
+          $this->mProductListPages[] =
+            Link::ToCategory($this->_mDepartmentId, $this->_mCategoryId, $i);
+        elseif (isset($this->_mDepartmentId))
+          $this->mProductListPages[] =
+            Link::ToDepartment($this->_mDepartmentId, $i);
+        else
+          $this->mProductListPages[] = Link::ToIndex($i);
+    }
+
+    /* 404 redirect if the page number is larger than
+       the total number of pages */
+    if ($this->mPage > $this->mrTotalPages)
+    {
+      // Clean output buffer
+      ob_clean();
+
+      // Load the 404 page
+      include '404.php';
+
+      // Clear the output buffer and stop execution
+      flush();
+      ob_flush();
+      ob_end_clean();
+      exit();
     }
 
     // Build links for product details pages
@@ -97,8 +126,7 @@ class ProductsList
           Link::Build('product_images/' . $this->mProducts[$i]['thumbnail']);
 
       $this->mProducts[$i]['attributes'] =
-      	Catalog::GetProductAttributes($this->mProducts[$i]['product_id']);
-
+        Catalog::GetProductAttributes($this->mProducts[$i]['product_id']);
     }
   }
 }

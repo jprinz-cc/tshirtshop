@@ -1,18 +1,24 @@
 {* products_list.tpl *}
 {load_presentation_object filename="products_list" assign="obj"}
-{if $obj->mrTotalPages > 1}
+{if count($obj->mProductListPages) > 0}
 <p>
-  Page {$obj->mPage} of {$obj->mrTotalPages}
+
   {if $obj->mLinkToPreviousPage}
-  <a href="{$obj->mLinkToPreviousPage}">Previous</a>
-  {else}
-  Previous
+  <a href="{$obj->mLinkToPreviousPage}">Previous page</a>
   {/if}
+
+  {section name=m loop=$obj->mProductListPages}
+    {if $obj->mPage eq $smarty.section.m.index_next}
+    <strong>{$smarty.section.m.index_next}</strong>
+    {else}
+    <a href="{$obj->mProductListPages[m]}">{$smarty.section.m.index_next}</a>
+    {/if}
+  {/section}
+
   {if $obj->mLinkToNextPage}
-  <a href="{$obj->mLinkToNextPage}">Next</a>
-  {else}
-  Next
+  <a href="{$obj->mLinkToNextPage}">Next page</a>
   {/if}
+
 </p>
 {/if}
 {if $obj->mProducts}
@@ -75,7 +81,6 @@
 
         {/section}
         </p>
-
       </td>
     {if $smarty.section.k.index % 2 != 0 && !$smarty.section.k.first ||
         $smarty.section.k.last}

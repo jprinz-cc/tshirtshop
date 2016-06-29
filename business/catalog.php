@@ -250,5 +250,6 @@ class Catalog
     // Execute the query and return the results
     return DatabaseHandler::GetOne($sql, $params);
   }
+
 }
 ?>
