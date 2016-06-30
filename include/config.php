@@ -50,4 +50,7 @@ define('VIRTUAL_LOCATION', '/tshirtshop/');
 define('SHORT_PRODUCT_DESCRIPTION_LENGTH', 150);
 define('PRODUCTS_PER_PAGE', 4);
 
+//Min word length for searches
+define('FT_MIN_WORD_LEN', 4);
+
 ?>

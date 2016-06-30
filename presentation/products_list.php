@@ -8,6 +8,9 @@ class ProductsList
   public $mLinkToPreviousPage;
   public $mProductListPages = array();
   public $mProducts;
+  public $mSearchDescription;
+  public $mAllWords = 'off';
+  public $mSearchString;
 
   // Private members
   private $_mDepartmentId;
@@ -16,6 +19,13 @@ class ProductsList
   // Class constructor
   public function __construct()
   {
+    // Retrieve the search string and AllWords from the query string
+    if (isset ($_GET['SearchResults']))
+    {
+      $this->mSearchString = trim(str_replace('-', ' ', $_GET['SearchString']));
+      $this->mAllWords = isset ($_GET['AllWords']) ? $_GET['AllWords'] : 'off';
+    }
+
     // Get DepartmentId from query string casting it to int
     if (isset ($_GET['DepartmentId']))
       $this->_mDepartmentId = (int)$_GET['DepartmentId'];
@@ -37,9 +47,37 @@ class ProductsList
 
   public function init()
   {
+    /* If searching the catalog, get the list of products by calling
+       the Search business tier method */
+    if (isset ($this->mSearchString))
+    {
+      // Get search results
+      $search_results = Catalog::Search($this->mSearchString,
+                                        $this->mAllWords,
+                                        $this->mPage,
+                                        $this->mrTotalPages);
+      // Get the list of products
+      $this->mProducts = $search_results['products'];
+      // Build the title for the list of products
+      if (count($search_results['accepted_words']) > 0)
+        $this->mSearchDescription =
+          '<p class="description">Products containing <font class="words">'
+          . ($this->mAllWords == 'on' ? 'all' : 'any') . '</font>'
+          . ' of these words: <font class="words">'
+          . implode(', ', $search_results['accepted_words']) .
+          '</font></p>';
+      if (count($search_results['ignored_words']) > 0)
+        $this->mSearchDescription .=
+          '<p class="description">Ignored words: <font class="words">'
+          . implode(', ', $search_results['ignored_words']) .
+          '</font></p>';
+      if (!(count($search_results['products']) > 0))
+        $this->mSearchDescription .=
+          '<p class="description">Your search generated no results.</p>';
+    }
     /* If browsing a category, get the list of products by calling
        the GetProductsInCategory() business tier method */
-    if (isset ($this->_mCategoryId))
+    elseif (isset ($this->_mCategoryId))
       $this->mProducts = Catalog::GetProductsInCategory(
         $this->_mCategoryId, $this->mPage, $this->mrTotalPages);
     /* If browsing a department, get the list of products by calling
@@ -61,7 +99,11 @@ class ProductsList
       // Build the Next link
       if ($this->mPage < $this->mrTotalPages)
       {
-        if (isset($this->_mCategoryId))
+        if (isset($_GET['SearchResults']))
+          $this->mLinkToNextPage =
+            Link::ToSearchResults($this->mSearchString, $this->mAllWords,
+                                  $this->mPage + 1);
+        elseif (isset($this->_mCategoryId))
           $this->mLinkToNextPage =
             Link::ToCategory($this->_mDepartmentId, $this->_mCategoryId,
                              $this->mPage + 1);
@@ -75,7 +117,11 @@ class ProductsList
       // Build the Previous link
       if ($this->mPage > 1)
       {
-        if (isset($this->_mCategoryId))
+        if (isset($_GET['SearchResults']))
+          $this->mLinkToPreviousPage =
+            Link::ToSearchResults($this->mSearchString, $this->mAllWords,
+                                  $this->mPage - 1);
+        elseif (isset($this->_mCategoryId))
           $this->mLinkToPreviousPage =
             Link::ToCategory($this->_mDepartmentId, $this->_mCategoryId,
                              $this->mPage - 1);
@@ -88,7 +134,10 @@ class ProductsList
 
       // Build the pages links
       for ($i = 1; $i <= $this->mrTotalPages; $i++)
-        if (isset($this->_mCategoryId))
+        if (isset($_GET['SearchResults']))
+          $this->mProductListPages[] =
+            Link::ToSearchResults($this->mSearchString, $this->mAllWords, $i);
+        elseif (isset($this->_mCategoryId))
           $this->mProductListPages[] =
             Link::ToCategory($this->_mDepartmentId, $this->_mCategoryId, $i);
         elseif (isset($this->_mDepartmentId))
@@ -100,7 +149,7 @@ class ProductsList
 
     /* 404 redirect if the page number is larger than
        the total number of pages */
-    if ($this->mPage > $this->mrTotalPages)
+    if ($this->mPage > $this->mrTotalPages && !empty($this->mrTotalPages))
     {
       // Clean output buffer
       ob_clean();

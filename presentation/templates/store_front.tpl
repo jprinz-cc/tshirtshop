@@ -15,7 +15,7 @@
 				<div id="yui-main">
 					<div class="yui-b">
 						<div id="header" class="yui-g">
-							<a href="index.php">
+							<a href="{$obj->mSiteUrl}">
 								<img src="{$obj->mSiteUrl}images/tshirtshop.png" alt="tshirtshop logo" />
 							</a>
 						</div>
@@ -25,6 +25,7 @@
 					</div>
 				</div>
 				<div class="yui-b">
+                    {include file="search_box.tpl"}
 					{include file="departments_list.tpl"}
 					{include file=$obj->mCategoriesCell}
 				</div>	

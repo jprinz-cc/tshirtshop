@@ -91,7 +91,12 @@ class Link{
         $proper_url = '';
 
         // Obtain proper URL for category pages
-        if (isset ($_GET['DepartmentId']) && isset ($_GET['CategoryId'])){
+         if (isset ($_GET['Search']) || isset($_GET['SearchResults']))
+        {
+          return ;
+        }
+        // Obtain proper URL for category pages
+        elseif (isset ($_GET['DepartmentId']) && isset ($_GET['CategoryId'])){
           if (isset ($_GET['Page']))
             $proper_url = self::ToCategory($_GET['DepartmentId'],
                             $_GET['CategoryId'], $_GET['Page']);
@@ -157,6 +162,30 @@ class Link{
           exit();
         }
     }
+
+    // Create link to the search page
+  public static function ToSearch()
+  {
+    return self::Build('index.php?Search');
+  }
+
+  // Create link to a search results page
+  public static function ToSearchResults($searchString, $allWords, $page = 1)
+  {
+    $link = 'search-results/find';
+
+    if (empty($searchString))
+      $link .= '/';
+    else
+      $link .= '-' . self::CleanUrlText($searchString) . '/';
+
+    $link .= 'all-words-' . $allWords . '/';
+
+    if ($page > 1)
+      $link .= 'page-' . $page . '/';
+
+    return self::Build($link);
+  }
 	
 }
 ?>

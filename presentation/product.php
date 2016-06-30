@@ -37,12 +37,11 @@ class Product
         $page = (int)$continue_shopping['Page'];
 
       if (isset ($continue_shopping['CategoryId']))
-        $this->mLinkToContinueShopping =
-          Link::ToCategory((int)$continue_shopping['DepartmentId'],
-                           (int)$continue_shopping['CategoryId'], $page);
+        $this->mLinkToContinueShopping = Link::ToCategory((int)$continue_shopping['DepartmentId'], (int)$continue_shopping['CategoryId'], $page);
       elseif (isset ($continue_shopping['DepartmentId']))
-        $this->mLinkToContinueShopping =
-          Link::ToDepartment((int)$continue_shopping['DepartmentId'], $page);
+        $this->mLinkToContinueShopping = Link::ToDepartment((int)$continue_shopping['DepartmentId'], $page);
+      elseif (isset ($continue_shopping['SearchResults']))
+        $this->mLinkToContinueShopping = Link::ToSearchResults(trim(str_replace('-', ' ', $continue_shopping['SearchString'])), $continue_shopping['AllWords'], $page);
       else
         $this->mLinkToContinueShopping = Link::ToIndex($page);
     }
